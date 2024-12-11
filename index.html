@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhớ nhớ nhớ em!!!</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans', sans-serif;
+      background-color: #FFC0CB;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    button {
+      font-size: 24px;
+      padding: 15px 30px;
+      color: white;
+      background-color: #FF69B4;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+    button:hover {
+      background-color: #FF85C2;
+    }
+    .popup {
+      position: absolute;
+      width: 320px;
+      height: 160px;
+      background-color: #FFC0CB;
+      color: white;
+      font-size: 16px;
+      font-style: italic;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <button onclick="startPopups()">Muốn nói là...</button>
+
+  <script>
+    function createPopup() {
+      const popup = document.createElement("div");
+      popup.className = "popup";
+      popup.textContent = "Nhớ nhớ nhớ em!!!";
+
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      const x = Math.random() * (screenWidth - 320);
+      const y = Math.random() * (screenHeight - 160);
+
+      popup.style.left = `${x}px`;
+      popup.style.top = `${y}px`;
+      popup.style.position = "absolute";
+
+      document.body.appendChild(popup);
+
+      setTimeout(() => {
+        popup.remove();
+      }, 10000); // Popup tồn tại trong 3 giây
+    }
+
+    function startPopups() {
+      let delay = 200; // Ban đầu là 200ms
+      let count = 0;
+
+      function createMultiplePopups() {
+        if (count < 50) {
+          createPopup();
+          count++;
+          delay *= 0.95; // Giảm thời gian delay
+          setTimeout(createMultiplePopups, delay);
+        }
+      }
+
+      createMultiplePopups();
+    }
+  </script>
+</body>
+</html>
