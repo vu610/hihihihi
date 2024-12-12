@@ -1,89 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nhớ nhớ nhớ em!!!</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Noto Sans', sans-serif;
-      background-color: #FFC0CB;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    button {
-      font-size: 24px;
-      padding: 15px 30px;
-      color: white;
-      background-color: #FF69B4;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    }
-    button:hover {
-      background-color: #FF85C2;
-    }
-    .popup {
-      position: absolute;
-      width: 320px;
-      height: 160px;
-      background-color: #FFC0CB;
-      color: white;
-      font-size: 16px;
-      font-style: italic;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 2px solid white;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhớ nhớ nhớ em!!!</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+          body {
+            margin: 0;
+            font-family: 'Noto Sans', sans-serif;
+            background: linear-gradient(135deg, #FFB6C1, #E6E6FA);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            animation: bgAnimate 15s ease infinite;
+        }
+
+        @keyframes bgAnimate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        button {
+            font-size: 24px;
+            padding: 15px 30px;
+            color: white;
+            background-color: #FF69B4;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #FF85C2;
+            transform: scale(1.1);
+        }
+
+        .popup {
+              position: absolute;
+              width: 250px;
+             height: 120px;
+            background-color: rgba(255, 192, 203, 0.85);
+            color: white;
+            font-size: 22px;
+            font-style: italic;
+             display: flex;
+           justify-content: center;
+             align-items: center;
+            border: 2px solid white;
+           border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+           pointer-events: auto;
+              transition: transform 0.2s, opacity 0.2s;
+           }
+
+
+        .popup:hover{
+             transform: scale(1.1);
+        }
+
+
+        .floating-text {
+             font-size: 24px;
+            font-style: italic;
+            color: white;
+            position: absolute;
+             transition: top 1s ease, transform 1s ease, opacity 1s ease;
+         }
+    </style>
 </head>
 <body>
-  <button onclick="startPopups()">Muốn nói là...</button>
+    <button><i class="fas fa-heart"></i> Muốn nói là...</button>
+    <audio id="audio" loop>
+        <source src="your-music-link.mp3" type="audio/mpeg">
+    </audio>
+     <div id="popup-container"></div>
 
-  <script>
+    <script>
+
+     const messages = [
+            "Nhớ em!",
+            "Em xinh đẹp quá!",
+            "Anh yêu em nhiều!",
+            "Gửi ngàn nụ hôn!",
+           "Em là tất cả đối với anh",
+            "Em đang làm gì thế?",
+             "Đến bên anh nào",
+           "Anh chỉ cần em",
+          "Em có nhớ anh không?",
+        "Nụ cười của em thật tuyệt!",
+           "Anh đang rất nhớ em đó",
+           "Em thật là đáng yêu",
+         "Mãi yêu em nhé!",
+       "Muốn ôm em quá!",
+      "Em luôn trong trái tim anh",
+        "Gặp em là điều may mắn nhất!",
+       "Thương em rất nhiều",
+    "<3",
+   "I love you so much!",
+    "miss u so muchhh!",
+
+       ];
+       const numPopups = 200;
+       const audio = document.getElementById('audio');
+       const popupContainer = document.getElementById('popup-container');
+         const popups = [];
+
+        let isRunning = false;
+       let popupCount = 0;
+
+      document.querySelector('button').addEventListener('click', function() {
+           audio.play();
+               createMultiplePopups();
+            createFloatingText();
+        });
+       function createFloatingText(){
+           let startX =  Math.random() * (window.innerWidth - 50) ;
+           let startY = window.innerHeight/2  ;
+              for (let i= 0 ; i<3;i++){
+                  startX += ( Math.random()-0.5) *20 ;
+              startY += ( Math.random()-0.5) *20 ;
+                let floatingText  = document.createElement('div') ;
+
+                let randomIndex = Math.floor(Math.random()* messages.length )
+               floatingText.textContent =  messages[randomIndex];
+                    floatingText.classList.add('floating-text')
+                   floatingText.style.left=`${startX}px`;
+                 floatingText.style.top=`${startY}px`
+
+                document.body.appendChild(floatingText);
+
+            let distance=50;
+
+               floatingText.addEventListener('mousemove',(e)=>{
+
+                floatingText.style.top= (startY+(e.clientY - window.innerHeight/2)/distance)  + 'px' ;
+                floatingText.style.left= (startX+(e.clientX - window.innerWidth/2)/distance) + 'px' ;
+             });
+
+
+         setTimeout(function(){
+
+                 floatingText.style.opacity='0';
+              floatingText.style.transform = 'translateY(-50px)';
+              setTimeout(() => {
+                 floatingText.remove();
+
+                }, 1000)
+
+
+            }, (i+1)*1000 + ( Math.random()*3*1000)  )
+             }
+         }
+
+
+   function createMultiplePopups(){
+       if (!isRunning) {
+              isRunning=true;
+
+              let delay = 100;
+               function addPopup(){
+
+                 if (popupCount < numPopups) {
+
+
+                         const popup=createPopup();
+
+                     popups.push(popup);
+
+                 animatePopup(popup);
+
+
+                     popupCount++;
+
+                      delay=delay*0.97;
+
+                         setTimeout(addPopup,delay)
+
+                      }
+                    }
+
+               addPopup() ;
+
+          }
+}
+
+
+
     function createPopup() {
-      const popup = document.createElement("div");
-      popup.className = "popup";
-      popup.textContent = "Nhớ nhớ nhớ em!!!";
 
-      const screenWidth = window.innerWidth;
-      const screenHeight = window.innerHeight;
-      const x = Math.random() * (screenWidth - 320);
-      const y = Math.random() * (screenHeight - 160);
 
-      popup.style.left = `${x}px`;
-      popup.style.top = `${y}px`;
-      popup.style.position = "absolute";
+            const popup = document.createElement("div");
+            const screenWidth = window.innerWidth;
+             const screenHeight = window.innerHeight;
 
-      document.body.appendChild(popup);
+
+                const x = Math.random() * (screenWidth - 250);
+               const y = Math.random() * (screenHeight - 120);
+               popup.style.left = `${x}px`;
+               popup.style.top = `${y}px`;
+
+         let randomIndex = Math.floor(Math.random()* messages.length )
+         popup.textContent =  messages[randomIndex] ;
+
+                 popup.classList.add('popup');
+
+
+
+                  popupContainer.appendChild(popup);
+
+
+
+                  popup.addEventListener('click',function(e){
+
+
+
+                       popup.style.transform='scale(1.1)';
+                          popup.textContent = 'Tớ cũng nhớ cậu!';
+                             setTimeout(function() {popup.remove(); },300);
+
+
+                   });
+              return popup ;
+
+            }
+
+
+
+        function animatePopup(popup){
 
       setTimeout(() => {
-        popup.remove();
-      }, 1000); // Popup tồn tại trong 3 giây
-    }
 
-    function startPopups() {
-      let delay = 200; // Ban đầu là 200ms
-      let count = 0;
 
-      function createMultiplePopups() {
-        if (count < 5000) {
-          createPopup();
-          count++;
-          delay *= 0.97; // Giảm thời gian delay
-          setTimeout(createMultiplePopups, delay);
-        }
-      }
+                popup.style.transform = 'translateY(50px)';
+                    popup.style.opacity = 0;
 
-      createMultiplePopups();
-    }
-  </script>
+
+
+             setTimeout(() => {
+
+                    popup.remove()
+
+
+                    let newPopup;
+
+
+              if(popupCount < numPopups) {  // vẫn loop bình thường khi <200
+               newPopup = createPopup();
+                     }
+
+                  else{
+
+                           newPopup = createPopup();
+
+
+                        }
+         if(popupCount< numPopups){
+
+
+                     if(popups.indexOf(popup)> -1 ){
+                   }else {
+                            popups.push(popup)
+
+                         }
+
+
+
+              animatePopup(newPopup)  // create new with timer when <=200;
+
+        }else {
+                       animatePopup(newPopup);
+
+
+
+                     const index = popups.indexOf(popup);
+
+                         if (index > -1) {
+
+
+                         popups.splice(index, 1);
+                               popups.push(newPopup) ;
+                        }
+
+              }
+
+
+                    },500)
+
+
+              },   Math.random() * (4000 - 2000) + 2000 );
+
+
+            }
+
+
+
+    </script>
 </body>
 </html>
